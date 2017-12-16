@@ -1,0 +1,25 @@
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+
+branches:
+  only:
+  - master
+
+services:
+  - docker
+
+cache: cargo
+
+before_script:
+  - cp .env.testing .env
+  - docker run --env-file .env -p 54320:5432 -d postgres
+
+script:
+  # Build
+  - cargo build --verbose
+
+  # Run all tests
+  - cargo test -- --ignored
